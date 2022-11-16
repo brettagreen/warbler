@@ -1,0 +1,17 @@
+{% if g.user %}   
+  {% if g.user.is_following(user) %}
+  <form method="POST" action="{{ url_for('stop_following', follow_id=user.id) }}">
+    <button class="btn btn-primary">Unfollow</button>
+  </form>
+  {% elif not user.private and not g.user.is_following(user) and g.user != user %}
+  <form method="POST" action="{{ url_for('add_follow', follow_id=user.id) }}">
+    <button class="btn btn-outline-primary">Follow</button>
+  </form>
+  {% elif user.private and g.user != user and g.user.is_pending(user) %}
+  <button class="btn btn-outline-primary">Follow request pending</button>
+  {% else %}
+  <form method="POST" action="{{ url_for('add_follow', follow_id=user.id) }}">
+    <button class="btn btn-outline-primary">Follow</button>
+  </form>
+  {% endif %}
+{% endif %}

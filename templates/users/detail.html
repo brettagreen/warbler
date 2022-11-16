@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div id="warbler-hero" class="full-width">
+  <img src="{{ user.header_image_url }}" alt="Header image for {{ user.username }}">
+</div>
+<img src="{{ user.image_url }}" alt="Image for {{ user.username }}" id="profile-avatar">
+<div class="row full-width">
+  <div class="container">
+    <div class="row justify-content-end">
+      <div class="col-9">
+        <ul class="user-stats nav nav-pills">
+          
+          {% include 'snippets/user_numbers.html' %}
+
+          <div class="ml-auto">
+            {% if g.user.id == user.id or g.user.admin %}
+            <a href="{{ url_for('profile', user_id=user.id) }}" class="btn btn-outline-secondary">Edit Profile</a>
+            <form method="POST" action="{{ url_for('reset_password', user_id=user.id) }}" class="form-inline">
+              <button class="btn btn-outline-secondary">Reset Password</button>
+            </form>
+            {% if user.private %}  
+              <a href="{{ url_for('follow_requests', user_id=user.id) }}" class="btn btn-outline-secondary">Follow Requests</a>
+            {% endif %}
+            <form method="POST" action="{{ url_for('delete_user', user_id=user.id) }}" class="form-inline">
+              <button class="btn btn-outline-danger ml-2">Delete Profile</button>
+            </form>
+            {% endif %}
+
+            {% include 'snippets/follow_unfollow.html' %}
+
+          </div>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-3">
+    <h4 id="sidebar-username">@{{ user.username }}</h4>
+    <p>{{ user.bio }}</p>
+    <p class="user-location"><span class="fa fa-map-marker"></span>{{ user.location }}</p>
+  </div>
+
+  {% block user_details %}
+  {% endblock %}
+
+</div>
+
+{% endblock %}

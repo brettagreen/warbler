@@ -1,0 +1,39 @@
+{% extends 'users/detail.html' %}
+
+{% block user_details %}
+  <div class="col-sm-9">
+    <div class="row">
+      {% if requests | length == 0 %}
+        <h1>you don't have any pending approval requests</h1>
+      {% else %}
+      {% for request in requests %}
+
+        <div class="col-lg-4 col-md-6 col-12">
+          <div class="card user-card">
+            <div class="card-inner">
+              <div class="image-wrapper">
+                <img src="{{ request.header_image_url }}" alt="" class="card-hero">
+              </div>
+              <div class="card-contents">
+                <a href="{{ url_for('users_show', user_id=request.id) }}" class="card-link">
+                  <img src="{{ request.image_url }}" alt="Image for {{ request.username }}" class="card-image">
+                  <p>@{{ request.username }}</p>
+                </a>
+
+                  <form method="POST" action="{{ url_for('approve_request', follow_id=request.id) }}">
+                    <button class="btn btn-outline-primary btn-sm">Approve</button>
+                  </form>
+
+              </div>
+              <p class="card-bio">{{ request.bio }}</p>
+            </div>
+          </div>
+        </div>
+
+      {% endfor %}
+      {% endif %}
+
+    </div>
+  </div>
+
+{% endblock %}
